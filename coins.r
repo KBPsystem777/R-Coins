@@ -124,5 +124,66 @@ ui <- dashboardPage(
 )
 
 
+####Server Part#####
+
+server <- function(input, output){
+    liveish_data <- reactive({
+        #Refresh the data Every 60secs
+        invalidateLater(60000)
+        get.data()
+    })
+
+    live.infobox.val <- reactive({
+        invalidateLater(60000)
+        get.infobox.val()
+    })
+
+    live.infobox.coin <- reactive({
+        invalidateLater(60000)
+        get.infobox.coin()
+    })
+
+
+    ##Output data table
+    output$table <- DT::renderDataTable(DT::datatable({
+        data <- liveish_data()
+    }))
+
+    ##Plotting the Output
+    output$plot <- renderPlot({ (gglplot(data=liveish_data(), aes(
+        x=Symbol, y=`% 1h`)) + geom_bar(stat="identify", fill = "springgreen3") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+        ggtitle("Gainers from the last hour"))
+    })
+
+    ##Info Box Output
+    output$top.coin <- renderInfoBox({
+        infoBox(
+            "Gain in Last Hour",
+            paste0(live.infobox.val(), "%"),
+            icon = icon("signal"),
+            color = "purple",
+            fill = TRUE
+        )
+    })
+
+    ##Info Box Output Coin Names
+    output$top.name <- renderInfoBox({
+        infoBox(
+            "Coin Name",
+            live.infoBox.coin(),
+            icon = icon("bitcoin"),
+            color = "purple",
+            fill = TRUE
+        )
+    })
+}
+
+
+
+###Deployment
+
+shinyApp(ui = ui, server = server);
+
+
 
 
