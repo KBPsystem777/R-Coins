@@ -56,7 +56,72 @@ get.infobox.val <- function(x) {
 }
 
 
+### Shiny Front-End
 
+ui <- dashboardPage(
+  
+  #This is the header
+  dashboardHeader(title = "Coin Gainers"),
+  
+  #This is the Sidebar
+  dashboardSidebar(
+    
+    h5("Coin Gainers from CoinMarketCap"),
+    br(),
+    br(),
+    br(),
+    br(),
+    br(),
+    br(),
+    br(),
+    br(),
+    br(),
+    br(),
+    h6("Built by Brad Lindblad in the R computing language and developed in GitHub by KBPsystem777
+      [  R Core Team (2018). R: A language and environment for statistical computing.
+          R Foundation for Statistical Computing,
+       Vienna, Austria. URL https://www.R-project.org/]"),
+    br(),
+    a("bradley.lindblad@gmail.com", href="bradley.lindblad@gmail.com"),
+    a("KBPsystem777", href="https://github.com/kbpsystem777")
+  ),
+  
+  
+  #This is the Body
+  dashboardBody(
+    fluidRow(
+      # Info Box
+      infoBoxOutput("top.coin", width = 3),
+      # Info Box
+      infoBoxOutput("top.name", width = 3)
+    ),
+    
+    fluidRow(
+      #Data Table
+      box(
+        status = "primary",
+        headerPanel("Data Table"),
+        solidHeader = T,
+        br(),
+        DT::dataTableOutput("table", height = "350px"),
+        width = 6,
+        height = "560px"
+      ),
+
+      #this is the Chart
+      box(
+          status = "primary",
+          headerPanel("Chart"),
+          solidHeader = T,
+          br(),
+          plotOutput("plot", height = "400px"),
+          width = 6,
+          height = "500px"
+      ),
+      width = 12      
+    )
+  )  
+)
 
 
 
